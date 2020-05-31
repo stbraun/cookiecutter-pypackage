@@ -1,4 +1,4 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: clean clean-test clean-pyc clean-build reports docs help
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -26,6 +26,10 @@ export PRINT_HELP_PYSCRIPT
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
+REPORTS_DIR = reports/
+FLAKE8_REPORT = $(REPORTS_DIR)flake8.txt
+TEST_REPORT = $(REPORTS_DIR)unittests.xml
+
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
@@ -49,13 +53,14 @@ clean-test: ## remove test and coverage artifacts
 	rm -f .coverage
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
+	rm -fr reports/
 
-lint: ## check style with flake8
-	flake8 {{ cookiecutter.project_slug }} tests
+lint: | reports ## check style with flake8
+	flake8 --output-file $(FLAKE8_REPORT) --benchmark --count --statistics {{ cookiecutter.project_slug }} tests
 
-test: ## run tests quickly with the default Python
+test: | reports ## run tests quickly with the default Python
 {%- if cookiecutter.use_pytest == 'y' %}
-	pytest
+	pytest --doctest-modules --junit-xml=$(TEST_REPORT) {{ cookiecutter.project_slug }} tests
 {%- else %}
 	python setup.py test
 {%- endif %}
@@ -72,6 +77,9 @@ coverage: ## check code coverage quickly with the default Python
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
+
+reports:
+	mkdir -p $(REPORTS_DIR)
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/{{ cookiecutter.project_slug }}.rst
