@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+watchdog = "*"
+flake8 = "*"
+coverage = "*"
+sphinx = "*"
+twine = "*"
+pytest = "*"
+pytest-runner = "*"
+pytest-watch = "*"
+bump2version = "*"
+nox = "*"
+
+[packages]
+
+[requires]
+python_version = "3.8"
