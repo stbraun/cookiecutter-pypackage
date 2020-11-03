@@ -2,14 +2,13 @@
 
 language: python
 python:
-  - 3.6
-  - 3.7
-
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox-travis
-
-# command to run tests, e.g. python setup.py test
-script: tox
+  - 3.8
+before_install:
+    - pip install -U pipenv
+    - pipenv install --dev
+install: skip
+script:
+    - nox
 
 # deploy new versions to PyPI
 deploy:
@@ -21,4 +20,4 @@ deploy:
   on:
     tags: true
     repo: stbraun/python_boilerplate
-    python: 3.7
+    python: 3.8
