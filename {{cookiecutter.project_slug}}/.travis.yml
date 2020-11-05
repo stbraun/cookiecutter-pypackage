@@ -2,14 +2,18 @@
 
 language: python
 python:
-  - 3.6
   - 3.7
+  - 3.8
+  - 3.9
 
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox-travis
-
-# Command to run tests, e.g. python setup.py test
-script: tox
+before_install:
+    - pip install --upgrade pip
+    - pip install pipenv
+    - pipenv lock -r > requirements.txt
+install: pip install -r requirements.txt
+script:
+    - make lint
+    - make test
 
 {% if cookiecutter.use_pypi_deployment_with_travis == 'y' -%}
 # Assuming you have installed the travis-ci CLI tool, after you
@@ -25,5 +29,5 @@ deploy:
   on:
     tags: true
     repo: {{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
-    python: 3.7
+    python: 3.9
 {%- endif %}
