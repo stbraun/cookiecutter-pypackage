@@ -96,4 +96,6 @@ target/
 output/
 python_boilerplate/
 
-/cookiecutter-pypackage.sublime-workspace
+*.sublime-project
+*.sublime-workspace
+
