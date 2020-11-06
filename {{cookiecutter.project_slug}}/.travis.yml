@@ -9,11 +9,11 @@ python:
 before_install:
     - pip install --upgrade pip
     - pip install pipenv
-    - pipenv lock -r > requirements.txt
-install: pip install -r requirements.txt
+    - pipenv install --dev
+install: skip
 script:
-    - make lint
-    - make test
+    - pipenv run make lint
+    - pipenv run python setup.py test
 
 {% if cookiecutter.use_pypi_deployment_with_travis == 'y' -%}
 # Assuming you have installed the travis-ci CLI tool, after you
